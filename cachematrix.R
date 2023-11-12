@@ -3,18 +3,23 @@
 makeCacheMatrix <- function(x = matrix()) {
         # Initialize the inverse to NULL
         inv <- NULL
+        
         # Define a function to set the matrix, updating the inverse cache
         set <- function(y) {
                 x <<- y
                 inv <<- NULL  # Setting a new matrix invalidates the cached inverse
         }
-        # Define a function to get the stored matrix
+        
+        # Define a function to get the current matrix
         get <- function() x
-        # Define a function to set the cached inverse
+        
+        # Define a function to set the cached inverse matrix
         setInverse <- function(inverse) inv <<- inverse
-        # Define a function to get the cached inverse
+        
+        # Define a function to get the cached inverse matrix
         getInverse <- function() inv
-        # Return a list of functions that can manipulate the matrix object
+        
+        # Return a list of functions that can calculate the inverse matrix operation
         list(set = set,
              get = get,
              setInverse = setInverse,
@@ -26,13 +31,19 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
         inv <- x$getInverse()
-        # Check if the inverse is already cached
+        
+        # Check if the inverse is already cached, and if so return the inverse matrix
         if (!is.null(inv)) {
                 message("getting cached data")
-                return(inv)  # If cached, return the cached inverse
+                return(inv)  
         }
-        mat <- x$get()  # Retrieve the matrix
-        inv <- solve(mat, ...)  # Compute the inverse
-        x$setInverse(inv)  # Cache the inverse for future use
+
+        # if the inverse matrix is not cached, calculate one
+        mat <- x$get()          
+        inv <- solve(mat, ...)  
+        # Cache the inverse for future use
+        x$setInverse(inv)  
+        
+        # Return the inverse matrix
         inv
 }
